@@ -24,3 +24,12 @@ USED: Add a food pellet that spawns at a random empty cell. When the snake eats 
 RESULTS: a red circle was added and when the green cubes (snake) hits one another appears and now once the snake hits the endge of the screen it ends the game and produces a final score.
 FIXES: none
 OBSERVATIONS: im kind of bad at these snake games
+
+// additional prompts
+
+Prompt 5: 
+USED: change/alter the theme of the game so its a ladybug (instead of the snake) and there is a trail of 1 block behind it and change the food pellet it is chasing to a simple flower shape
+RESULTS: the snake turned into a ladybug(1by1 red cube) and the food pellet turned into a simple flower, it also had a trail of black behind it
+FIXES: none
+OBSERVATIONS: in the next prompt im going to make the ladybug a circle and have the trail behind it be like dotted white lines
+
