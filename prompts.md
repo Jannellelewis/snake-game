@@ -47,3 +47,7 @@ RESULTS: each time the lady bug hits the flower, its speed increase a little bit
 OBSERVATIONS: for the next prompts im going to have it create a button to save previous score, reset score and add most recent score to accumulate best total score
 
 
+Prompt 8: 
+USED: before the game starts make a start screen with the the words "LadyBug in Spring" and below that it should have a button that says start the game. Then below the button it should put the most recent score, if this is the first time playing it should say N/A. 
+FIXES: no fixes, it worked how i wanted it to, and in next prompt im going to make and end/restart screen
+OBSERVATIONS: it might just be mine but there is already a lot of code on there for such a simple game, i cant imagine what complex open world games are like

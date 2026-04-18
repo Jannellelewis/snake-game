@@ -50,6 +50,8 @@ public class SnakeGame extends JFrame {
         private Point food;
         private int score;
         private boolean gameOver;
+        private boolean gameStarted;
+        private int recentScore;
         private int currentDelay;
         private Color currentPetalColor;
         private final java.util.Random random = new java.util.Random();
@@ -57,6 +59,8 @@ public class SnakeGame extends JFrame {
         public GamePanel() {
             setBackground(BG_COLOR);
             setFocusable(true);
+            recentScore = -1;
+            gameStarted = false;
             initializeControls();
             initializeTimer();
             resetGame();
@@ -81,7 +85,6 @@ public class SnakeGame extends JFrame {
             spawnFood();
             if (timer != null) {
                 timer.setDelay(currentDelay);
-                timer.restart();
             }
             requestFocusInWindow();
             repaint();
@@ -115,15 +118,34 @@ public class SnakeGame extends JFrame {
                         case java.awt.event.KeyEvent.VK_R:
                             if (gameOver) {
                                 resetGame();
+                                gameStarted = true;
+                                timer.start();
                             }
                             break;
+                    }
+                }
+            });
+            addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mousePressed(java.awt.event.MouseEvent e) {
+                    if (!gameStarted && getStartButton().contains(e.getPoint())) {
+                        startGame();
                     }
                 }
             });
         }
 
         private void initializeTimer() {
-            timer = new Timer(TIMER_DELAY, e -> moveSnake());
+            timer = new Timer(TIMER_DELAY, e -> {
+                if (gameStarted && !gameOver) {
+                    moveSnake();
+                }
+            });
+        }
+
+        private void startGame() {
+            resetGame();
+            gameStarted = true;
             timer.start();
         }
 
@@ -164,7 +186,7 @@ public class SnakeGame extends JFrame {
         }
 
         private void moveSnake() {
-            if (gameOver) {
+            if (gameOver || !gameStarted) {
                 return;
             }
 
@@ -216,6 +238,8 @@ public class SnakeGame extends JFrame {
 
         private void endGame() {
             gameOver = true;
+            gameStarted = false;
+            recentScore = score;
             timer.stop();
             repaint();
         }
@@ -224,7 +248,10 @@ public class SnakeGame extends JFrame {
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             Graphics2D g2d = (Graphics2D) g;
-            
+            if (!gameStarted) {
+                drawStartScreen(g2d);
+                return;
+            }
             drawGrid(g2d);
             drawFlower(g2d);
             drawLadybug(g2d);
@@ -293,6 +320,43 @@ public class SnakeGame extends JFrame {
             g.setColor(TEXT_COLOR);
             g.setFont(new Font("Arial", Font.BOLD, 16));
             g.drawString("Score: " + score, 10, 20);
+        }
+
+        private void drawStartScreen(Graphics2D g) {
+            int width = getWidth();
+            int height = getHeight();
+
+            g.setColor(BG_COLOR);
+            g.fillRect(0, 0, width, height);
+
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("Arial", Font.BOLD, 36));
+            String title = "LadyBug in Spring";
+            FontMetrics fm = g.getFontMetrics();
+            int titleWidth = fm.stringWidth(title);
+            g.drawString(title, (width - titleWidth) / 2, height / 3);
+
+            Rectangle button = getStartButton();
+            g.setColor(new Color(70, 130, 180));
+            g.fillRect(button.x, button.y, button.width, button.height);
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("Arial", Font.BOLD, 20));
+            String buttonText = "Start the Game";
+            int buttonTextWidth = g.getFontMetrics().stringWidth(buttonText);
+            g.drawString(buttonText, button.x + (button.width - buttonTextWidth) / 2, button.y + button.height / 2 + 7);
+
+            g.setFont(new Font("Arial", Font.PLAIN, 18));
+            String recentText = "Most recent score: " + (recentScore < 0 ? "N/A" : recentScore);
+            int recentTextWidth = g.getFontMetrics().stringWidth(recentText);
+            g.drawString(recentText, (width - recentTextWidth) / 2, button.y + button.height + 40);
+        }
+
+        private Rectangle getStartButton() {
+            int width = 200;
+            int height = 50;
+            int x = (getWidth() - width) / 2;
+            int y = getHeight() / 2;
+            return new Rectangle(x, y, width, height);
         }
 
         private void drawGameOver(Graphics2D g) {
