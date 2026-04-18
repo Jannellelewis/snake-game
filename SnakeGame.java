@@ -29,12 +29,13 @@ public class SnakeGame extends JFrame {
         private static final int CELL_SIZE = 30;
         private static final Color GRID_COLOR = new Color(60, 60, 60);
         private static final Color LADYBUG_COLOR = Color.RED;
-        private static final Color TRAIL_COLOR = Color.BLACK;
+        private static final Color TRAIL_COLOR = Color.WHITE;
         private static final Color FLOWER_COLOR = Color.YELLOW;
         private static final Color PETAL_COLOR = Color.PINK;
         private static final Color BG_COLOR = new Color(30, 30, 30);
         private static final Color TEXT_COLOR = Color.WHITE;
         private static final int TIMER_DELAY = 150;
+        private static final Color[] FLOWER_COLORS = {Color.YELLOW, Color.BLUE, Color.GREEN, Color.ORANGE, new Color(128, 0, 128), Color.CYAN};
 
         private enum Direction {
             UP, DOWN, LEFT, RIGHT
@@ -47,6 +48,7 @@ public class SnakeGame extends JFrame {
         private Point food;
         private int score;
         private boolean gameOver;
+        private Color currentFlowerColor;
         private final java.util.Random random = new java.util.Random();
 
         public GamePanel() {
@@ -69,6 +71,7 @@ public class SnakeGame extends JFrame {
             nextDirection = Direction.RIGHT;
             score = 0;
             gameOver = false;
+            currentFlowerColor = Color.YELLOW;
             ladybug.add(new Point(9, 10));  // trail
             ladybug.add(new Point(10, 10)); // head (ladybug)
             spawnFood();
@@ -196,6 +199,7 @@ public class SnakeGame extends JFrame {
             ladybug.add(newHead);
             if (eating) {
                 score += 1;
+                currentFlowerColor = FLOWER_COLORS[score % FLOWER_COLORS.length];
                 spawnFood();
             } else {
                 ladybug.remove(0);
@@ -246,10 +250,12 @@ public class SnakeGame extends JFrame {
                 int y = segment.y * CELL_SIZE;
                 if (i == ladybug.size() - 1) { // head
                     g.setColor(LADYBUG_COLOR);
-                } else { // trail
+                    g.fillOval(x + 1, y + 1, CELL_SIZE - 2, CELL_SIZE - 2);
+                } else { // trail - white dotted lines
                     g.setColor(TRAIL_COLOR);
+                    int dotSize = CELL_SIZE / 4;
+                    g.fillOval(x + CELL_SIZE / 2 - dotSize / 2, y + CELL_SIZE / 2 - dotSize / 2, dotSize, dotSize);
                 }
-                g.fillRect(x + 1, y + 1, CELL_SIZE - 2, CELL_SIZE - 2);
             }
         }
 
@@ -265,7 +271,7 @@ public class SnakeGame extends JFrame {
             int centerSize = CELL_SIZE / 6;
 
             // Draw center
-            g.setColor(FLOWER_COLOR);
+            g.setColor(currentFlowerColor);
             g.fillOval(centerX - centerSize / 2, centerY - centerSize / 2, centerSize, centerSize);
 
             // Draw petals
