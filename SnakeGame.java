@@ -28,8 +28,10 @@ public class SnakeGame extends JFrame {
     private static class GamePanel extends JPanel {
         private static final int CELL_SIZE = 30;
         private static final Color GRID_COLOR = new Color(60, 60, 60);
-        private static final Color SNAKE_COLOR = Color.GREEN;
-        private static final Color FOOD_COLOR = Color.RED;
+        private static final Color LADYBUG_COLOR = Color.RED;
+        private static final Color TRAIL_COLOR = Color.BLACK;
+        private static final Color FLOWER_COLOR = Color.YELLOW;
+        private static final Color PETAL_COLOR = Color.PINK;
         private static final Color BG_COLOR = new Color(30, 30, 30);
         private static final Color TEXT_COLOR = Color.WHITE;
         private static final int TIMER_DELAY = 150;
@@ -38,7 +40,7 @@ public class SnakeGame extends JFrame {
             UP, DOWN, LEFT, RIGHT
         }
 
-        private List<Point> snake;
+        private List<Point> ladybug;
         private Direction currentDirection;
         private Direction nextDirection;
         private Timer timer;
@@ -62,14 +64,13 @@ public class SnakeGame extends JFrame {
         }
 
         private void resetGame() {
-            snake = new ArrayList<>();
+            ladybug = new ArrayList<>();
             currentDirection = Direction.RIGHT;
             nextDirection = Direction.RIGHT;
             score = 0;
             gameOver = false;
-            snake.add(new Point(8, 10));  // tail
-            snake.add(new Point(9, 10));  // middle
-            snake.add(new Point(10, 10)); // head
+            ladybug.add(new Point(9, 10));  // trail
+            ladybug.add(new Point(10, 10)); // head (ladybug)
             spawnFood();
             if (timer != null) {
                 timer.restart();
@@ -127,13 +128,13 @@ public class SnakeGame extends JFrame {
             }
 
             boolean[][] occupied = new boolean[cols][rows];
-            for (Point segment : snake) {
+            for (Point segment : ladybug) {
                 if (segment.x >= 0 && segment.x < cols && segment.y >= 0 && segment.y < rows) {
                     occupied[segment.x][segment.y] = true;
                 }
             }
 
-            int freeCells = cols * rows - snake.size();
+            int freeCells = cols * rows - ladybug.size();
             if (freeCells <= 0) {
                 food = null;
                 return;
@@ -160,7 +161,7 @@ public class SnakeGame extends JFrame {
             }
 
             currentDirection = nextDirection;
-            Point head = snake.get(snake.size() - 1);
+            Point head = ladybug.get(ladybug.size() - 1);
             int cols = getWidth() / CELL_SIZE;
             int rows = getHeight() / CELL_SIZE;
             int newX = head.x;
@@ -182,9 +183,9 @@ public class SnakeGame extends JFrame {
             boolean eating = food != null && newHead.equals(food);
             boolean collision;
             if (eating) {
-                collision = snake.contains(newHead);
+                collision = ladybug.contains(newHead);
             } else {
-                collision = snake.subList(1, snake.size()).contains(newHead);
+                collision = ladybug.subList(1, ladybug.size()).contains(newHead);
             }
 
             if (collision) {
@@ -192,12 +193,12 @@ public class SnakeGame extends JFrame {
                 return;
             }
 
-            snake.add(newHead);
+            ladybug.add(newHead);
             if (eating) {
                 score += 1;
                 spawnFood();
             } else {
-                snake.remove(0);
+                ladybug.remove(0);
             }
             repaint();
         }
@@ -214,8 +215,8 @@ public class SnakeGame extends JFrame {
             Graphics2D g2d = (Graphics2D) g;
             
             drawGrid(g2d);
-            drawFood(g2d);
-            drawSnake(g2d);
+            drawFlower(g2d);
+            drawLadybug(g2d);
             drawScore(g2d);
             if (gameOver) {
                 drawGameOver(g2d);
@@ -238,23 +239,41 @@ public class SnakeGame extends JFrame {
             }
         }
 
-        private void drawSnake(Graphics2D g) {
-            g.setColor(SNAKE_COLOR);
-            for (Point segment : snake) {
+        private void drawLadybug(Graphics2D g) {
+            for (int i = 0; i < ladybug.size(); i++) {
+                Point segment = ladybug.get(i);
                 int x = segment.x * CELL_SIZE;
                 int y = segment.y * CELL_SIZE;
+                if (i == ladybug.size() - 1) { // head
+                    g.setColor(LADYBUG_COLOR);
+                } else { // trail
+                    g.setColor(TRAIL_COLOR);
+                }
                 g.fillRect(x + 1, y + 1, CELL_SIZE - 2, CELL_SIZE - 2);
             }
         }
 
-        private void drawFood(Graphics2D g) {
+        private void drawFlower(Graphics2D g) {
             if (food == null) {
                 return;
             }
-            g.setColor(FOOD_COLOR);
             int x = food.x * CELL_SIZE;
             int y = food.y * CELL_SIZE;
-            g.fillOval(x + 4, y + 4, CELL_SIZE - 8, CELL_SIZE - 8);
+            int centerX = x + CELL_SIZE / 2;
+            int centerY = y + CELL_SIZE / 2;
+            int petalSize = CELL_SIZE / 4;
+            int centerSize = CELL_SIZE / 6;
+
+            // Draw center
+            g.setColor(FLOWER_COLOR);
+            g.fillOval(centerX - centerSize / 2, centerY - centerSize / 2, centerSize, centerSize);
+
+            // Draw petals
+            g.setColor(PETAL_COLOR);
+            g.fillOval(centerX - petalSize / 2, centerY - CELL_SIZE / 2, petalSize, petalSize); // top
+            g.fillOval(centerX - petalSize / 2, centerY + CELL_SIZE / 2 - petalSize, petalSize, petalSize); // bottom
+            g.fillOval(centerX - CELL_SIZE / 2, centerY - petalSize / 2, petalSize, petalSize); // left
+            g.fillOval(centerX + CELL_SIZE / 2 - petalSize, centerY - petalSize / 2, petalSize, petalSize); // right
         }
 
         private void drawScore(Graphics2D g) {
