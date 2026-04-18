@@ -30,12 +30,14 @@ public class SnakeGame extends JFrame {
         private static final Color GRID_COLOR = new Color(60, 60, 60);
         private static final Color LADYBUG_COLOR = Color.RED;
         private static final Color TRAIL_COLOR = Color.WHITE;
-        private static final Color FLOWER_COLOR = Color.YELLOW;
+        private static final Color FLOWER_CENTER_COLOR = Color.WHITE;
         private static final Color PETAL_COLOR = Color.PINK;
         private static final Color BG_COLOR = new Color(30, 30, 30);
         private static final Color TEXT_COLOR = Color.WHITE;
         private static final int TIMER_DELAY = 150;
-        private static final Color[] FLOWER_COLORS = {Color.YELLOW, Color.BLUE, Color.GREEN, Color.ORANGE, new Color(128, 0, 128), Color.CYAN};
+        private static final int SPEED_INCREMENT = 5;
+        private static final int MIN_DELAY = 20;
+        private static final Color[] PETAL_COLORS = {Color.YELLOW, Color.BLUE, Color.GREEN, Color.ORANGE, new Color(128, 0, 128), Color.CYAN};
 
         private enum Direction {
             UP, DOWN, LEFT, RIGHT
@@ -48,7 +50,8 @@ public class SnakeGame extends JFrame {
         private Point food;
         private int score;
         private boolean gameOver;
-        private Color currentFlowerColor;
+        private int currentDelay;
+        private Color currentPetalColor;
         private final java.util.Random random = new java.util.Random();
 
         public GamePanel() {
@@ -71,11 +74,13 @@ public class SnakeGame extends JFrame {
             nextDirection = Direction.RIGHT;
             score = 0;
             gameOver = false;
-            currentFlowerColor = Color.YELLOW;
+            currentDelay = TIMER_DELAY;
+            currentPetalColor = PETAL_COLORS[0];
             ladybug.add(new Point(9, 10));  // trail
             ladybug.add(new Point(10, 10)); // head (ladybug)
             spawnFood();
             if (timer != null) {
+                timer.setDelay(currentDelay);
                 timer.restart();
             }
             requestFocusInWindow();
@@ -199,7 +204,9 @@ public class SnakeGame extends JFrame {
             ladybug.add(newHead);
             if (eating) {
                 score += 1;
-                currentFlowerColor = FLOWER_COLORS[score % FLOWER_COLORS.length];
+                currentDelay = Math.max(MIN_DELAY, currentDelay - SPEED_INCREMENT);
+                timer.setDelay(currentDelay);
+                currentPetalColor = PETAL_COLORS[score % PETAL_COLORS.length];
                 spawnFood();
             } else {
                 ladybug.remove(0);
@@ -271,11 +278,11 @@ public class SnakeGame extends JFrame {
             int centerSize = CELL_SIZE / 6;
 
             // Draw center
-            g.setColor(currentFlowerColor);
+            g.setColor(FLOWER_CENTER_COLOR);
             g.fillOval(centerX - centerSize / 2, centerY - centerSize / 2, centerSize, centerSize);
 
-            // Draw petals
-            g.setColor(PETAL_COLOR);
+            // Draw petals with changing color
+            g.setColor(currentPetalColor);
             g.fillOval(centerX - petalSize / 2, centerY - CELL_SIZE / 2, petalSize, petalSize); // top
             g.fillOval(centerX - petalSize / 2, centerY + CELL_SIZE / 2 - petalSize, petalSize, petalSize); // bottom
             g.fillOval(centerX - CELL_SIZE / 2, centerY - petalSize / 2, petalSize, petalSize); // left

@@ -41,3 +41,7 @@ RESULTS: at first it was the ladybug that changed colors, then i corrected it an
 OBSERVATIONS: I realized i need to be precise with my prompt
 
 
+Prompt 7: when the lady bug hits the flower, change the color of the petals each time but keep the center of it white. Each time the ladybug hits a flower increase the speed of the ladybug by 20 milliseconds
+FIXES: i told it to change it so that the lady bug increase speed only 5 milisceonds instead
+RESULTS: each time the lady bug hits the flower, its speed increase a little bit and the color of the petals change
+OBSERVATIONS: for the necxt prompts im going to have it
