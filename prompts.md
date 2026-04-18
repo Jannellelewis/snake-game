@@ -33,3 +33,11 @@ RESULTS: the snake turned into a ladybug(1by1 red cube) and the food pellet turn
 FIXES: none
 OBSERVATIONS: in the next prompt im going to make the ladybug a circle and have the trail behind it be like dotted white lines
 
+
+Prompt 6: 
+USED: change the shape of the lady bug into a circle. change the trail behind into white dotted lines, like the ladybug is flying. AFter each time the flower has been collected, change the color
+FIXES: i wasnt clear enough the first time so i corrected it and said that it should be the flower changing color not the ladybug. the lady bug should stay red, but then that caused an error (an error, it says that PURPLE cannot be resolved or is not  a field ava(33554503) {Ln 38, Col 114})
+RESULTS: at first it was the ladybug that changed colors, then i corrected it and changed it so the flower changed colors. Its a red cirlce(ladybug) with a trail of white dotted lines and each time the ladybug hits the flower it changes color
+OBSERVATIONS: I realized i need to be precise with my prompt
+
+
