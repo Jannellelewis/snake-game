@@ -50,4 +50,12 @@ OBSERVATIONS: for the next prompts im going to have it create a button to save p
 Prompt 8: 
 USED: before the game starts make a start screen with the the words "LadyBug in Spring" and below that it should have a button that says start the game. Then below the button it should put the most recent score, if this is the first time playing it should say N/A. 
 FIXES: no fixes, it worked how i wanted it to, and in next prompt im going to make and end/restart screen
+RESULTS: there is a start screen but if you die it goes back to the start screen immediatly
 OBSERVATIONS: it might just be mine but there is already a lot of code on there for such a simple game, i cant imagine what complex open world games are like
+
+
+Prompt 9: 
+USED: add a end screen that says you died after you die, and it should display the score before you died. Then below should be a button that says to add that score to total score and below that button shgould be a continue snake game. while the person is playing the game their current score should be in the right corner
+FIXES: after i ran that prompt through it didnt make a end screen so i asked it"please make an end screen that shows after you died. It should say YOU DIED then below have a button that asks to continue playing and below that is another button that asks if you wnat to add current score to total score"  i tried to ask it to make an end screen 4 time but each time it wouldnt
+RESULTS: basically same as the otehr prompt but when you die it just pauses the game exactly how you died
+OBSERVATIONS: its really hard, annoying and confusing to figure out why something isnt working the way you want it to when you code this way
