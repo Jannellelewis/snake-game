@@ -56,6 +56,6 @@ OBSERVATIONS: it might just be mine but there is already a lot of code on there 
 
 Prompt 9: 
 USED: add a end screen that says you died after you die, and it should display the score before you died. Then below should be a button that says to add that score to total score and below that button shgould be a continue snake game. while the person is playing the game their current score should be in the right corner
-FIXES: after i ran that prompt through it didnt make a end screen so i asked it"please make an end screen that shows after you died. It should say YOU DIED then below have a button that asks to continue playing and below that is another button that asks if you wnat to add current score to total score"  i tried to ask it to make an end screen 4 time but each time it wouldnt
-RESULTS: basically same as the otehr prompt but when you die it just pauses the game exactly how you died
+FIXES: after i ran that prompt through it didnt make a end screen so i asked it"please make an end screen that shows after you died. It should say YOU DIED then below have a button that asks to continue playing and below that is another button that asks if you wnat to add current score to total score", then after asking it 4 times to make an end screen it finally made on
+RESULTS: same start and playing type but when you die, there is an endscreen that asks to conitnue and/or add current score total one
 OBSERVATIONS: its really hard, annoying and confusing to figure out why something isnt working the way you want it to when you code this way

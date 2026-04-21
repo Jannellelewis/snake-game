@@ -52,6 +52,7 @@ public class SnakeGame extends JFrame {
         private boolean gameOver;
         private boolean gameStarted;
         private int recentScore;
+        private int totalScore;
         private int currentDelay;
         private Color currentPetalColor;
         private final java.util.Random random = new java.util.Random();
@@ -238,7 +239,6 @@ public class SnakeGame extends JFrame {
 
         private void endGame() {
             gameOver = true;
-            gameStarted = false;
             recentScore = score;
             timer.stop();
             repaint();
@@ -250,14 +250,13 @@ public class SnakeGame extends JFrame {
             Graphics2D g2d = (Graphics2D) g;
             if (!gameStarted) {
                 drawStartScreen(g2d);
-                return;
-            }
-            drawGrid(g2d);
-            drawFlower(g2d);
-            drawLadybug(g2d);
-            drawScore(g2d);
-            if (gameOver) {
+            } else if (gameOver) {
                 drawGameOver(g2d);
+            } else {
+                drawGrid(g2d);
+                drawFlower(g2d);
+                drawLadybug(g2d);
+                drawScore(g2d);
             }
         }
 
@@ -319,7 +318,9 @@ public class SnakeGame extends JFrame {
         private void drawScore(Graphics2D g) {
             g.setColor(TEXT_COLOR);
             g.setFont(new Font("Arial", Font.BOLD, 16));
-            g.drawString("Score: " + score, 10, 20);
+            String scoreText = "Score: " + score;
+            int textWidth = g.getFontMetrics().stringWidth(scoreText);
+            g.drawString(scoreText, getWidth() - textWidth - 10, 20);
         }
 
         private void drawStartScreen(Graphics2D g) {
@@ -359,27 +360,56 @@ public class SnakeGame extends JFrame {
             return new Rectangle(x, y, width, height);
         }
 
+        private Rectangle getContinueButton() {
+            int width = 150;
+            int height = 40;
+            int x = (getWidth() - width) / 2;
+            int y = getHeight() / 2 + 60;
+            return new Rectangle(x, y, width, height);
+        }
+
+        private Rectangle getAddScoreButton() {
+            int width = 250;
+            int height = 40;
+            int x = (getWidth() - width) / 2;
+            int y = getHeight() / 2 + 110;
+            return new Rectangle(x, y, width, height);
+        }
+
         private void drawGameOver(Graphics2D g) {
             int width = getWidth();
             int height = getHeight();
-            g.setColor(new Color(0, 0, 0, 170));
+            g.setColor(BG_COLOR);
             g.fillRect(0, 0, width, height);
 
             g.setColor(Color.WHITE);
             g.setFont(new Font("Arial", Font.BOLD, 36));
-            String message = "Game Over";
+            String message = "YOU DIED";
             FontMetrics fm = g.getFontMetrics();
             int messageWidth = fm.stringWidth(message);
             g.drawString(message, (width - messageWidth) / 2, height / 2 - 20);
 
             g.setFont(new Font("Arial", Font.PLAIN, 18));
-            String scoreMessage = "Final Score: " + score;
+            String scoreMessage = "Score before you died: " + score;
             int scoreWidth = g.getFontMetrics().stringWidth(scoreMessage);
             g.drawString(scoreMessage, (width - scoreWidth) / 2, height / 2 + 10);
 
-            String restartMessage = "Press R to restart";
-            int restartWidth = g.getFontMetrics().stringWidth(restartMessage);
-            g.drawString(restartMessage, (width - restartWidth) / 2, height / 2 + 40);
+            Rectangle continueButton = getContinueButton();
+            g.setColor(new Color(34, 139, 34));
+            g.fillRect(continueButton.x, continueButton.y, continueButton.width, continueButton.height);
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("Arial", Font.BOLD, 16));
+            String continueText = "Continue Playing";
+            int continueTextWidth = g.getFontMetrics().stringWidth(continueText);
+            g.drawString(continueText, continueButton.x + (continueButton.width - continueTextWidth) / 2, continueButton.y + continueButton.height / 2 + 6);
+
+            Rectangle addButton = getAddScoreButton();
+            g.setColor(new Color(70, 130, 180));
+            g.fillRect(addButton.x, addButton.y, addButton.width, addButton.height);
+            g.setColor(Color.WHITE);
+            String addText = "Add Current Score to Total Score";
+            int addTextWidth = g.getFontMetrics().stringWidth(addText);
+            g.drawString(addText, addButton.x + (addButton.width - addTextWidth) / 2, addButton.y + addButton.height / 2 + 6);
         }
     }
 }
